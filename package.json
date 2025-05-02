@@ -1,0 +1,22 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "express": "^4.21.2",
+    "react": "^19.0.0",
+    "react-router-dom": "^7.1.5",
+    "styled-components": "^6.1.15",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0"
+  }
+}
