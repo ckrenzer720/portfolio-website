@@ -2,26 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import * as yup from "yup";
 import emailjs from "@emailjs/browser";
 
-console.log("test contact");
-
 const validationErrors = {
-  name: "you have to enter your name, silly",
-  email: "that's not a valid email",
-  message: "pleeease write a message",
+  user_name: "You have to enter your name, silly.",
+  user_email: "That's not a valid email.",
+  message: "Please write a message.",
 };
 
 const validationSchema = yup.object().shape({
   user_name: yup.string().required(validationErrors.user_name),
   user_email: yup
     .string()
-    .email(validationErrors.email)
-    .required("user_email is required")
-    .matches(
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      "Invalid email format"
-    ),
+    .email(validationErrors.user_email)
+    .required("Email is required"),
   user_contact: yup.string(),
-  message: yup.string().min(5, validationErrors.message),
+  message: yup
+    .string()
+    .min(5, validationErrors.message)
+    .required("Message is required"),
 });
 
 const initialValues = {
@@ -32,9 +29,6 @@ const initialValues = {
 };
 
 function Contact() {
-  {
-    /* FUNCTION BEGINS */
-  }
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({
     user_name: "",
@@ -55,40 +49,42 @@ function Contact() {
       .reach(validationSchema, key)
       .validate(value)
       .then(() => {
-        setErrors({ ...errors, [key]: "" });
+        setErrors((prevErrors) => ({ ...prevErrors, [key]: "" }));
       })
       .catch((error) => {
-        setErrors({ ...errors, [key]: error.errors[0] });
+        setErrors((prevErrors) => ({ ...prevErrors, [key]: error.errors[0] }));
       });
   };
 
   const onChange = (evt) => {
     const { id, value } = evt.target;
     validate(id, value);
-    setValues({ ...values, [id]: value });
+    setValues((prevValues) => ({ ...prevValues, [id]: value }));
   };
 
   const sendEmail = (evt) => {
     evt.preventDefault();
-    setValues(initialValues);
-    alert("Thank you for reaching out! I'll get back to you soon!");
     emailjs
-      .sendForm("service_nyiplyk", "contact_form", form.current, {
-        publicKey: "oReZPAeV9Y_5xjXCy",
-      })
+      .sendForm(
+        "service_nyiplyk",
+        "contact_form",
+        form.current,
+        "oReZPAeV9Y_5xjXCy" // Public key
+      )
       .then(
         () => {
-          console.log("SUCCESS!");
+          alert("Thank you for reaching out! I'll get back to you soon!");
+          setValues(initialValues); // Reset form values
         },
         (error) => {
-          console.log("FAILED...", error.text);
+          console.error("FAILED...", error.text);
         }
       );
   };
 
   return (
     <div>
-      <form id="my-form" onSubmit={sendEmail}>
+      <form id="my-form" ref={form} onSubmit={sendEmail}>
         <div className="input-groups">
           <h3>Give me those credentials... if you want...</h3>
           <div className="input-group">
@@ -101,6 +97,7 @@ function Contact() {
               value={values.user_name}
               onChange={onChange}
             />
+            {errors.user_name && <p className="error">{errors.user_name}</p>}
             <br />
             <br />
             <label htmlFor="user_email">Email: </label>
@@ -112,16 +109,17 @@ function Contact() {
               value={values.user_email}
               onChange={onChange}
             />
+            {errors.user_email && <p className="error">{errors.user_email}</p>}
             <br />
             <br />
             <label htmlFor="user_contact">Tele (Optional): </label>
             <input
               placeholder="Enter your number"
               id="user_contact"
-              value={values.user_contact}
               name="user_contact"
               type="tel"
               pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
+              value={values.user_contact}
               onChange={onChange}
             />
             <br />
@@ -131,10 +129,10 @@ function Contact() {
               placeholder="Write me a little something..."
               id="message"
               name="message"
-              type="text"
               value={values.message}
               onChange={onChange}
             />
+            {errors.message && <p className="error">{errors.message}</p>}
             <br />
           </div>
         </div>
