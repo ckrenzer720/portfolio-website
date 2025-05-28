@@ -1,0 +1,35 @@
+:root {
+  /* Main Colors */
+  --primary-color: #3a4c47;
+  --primary-light: #517d5c;
+  --background-color: #e9f0f3;
+  --text-color: #333;
+  --text-light: #666;
+  
+  /* UI Colors */
+  --white: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color-dark: rgba(0, 0, 0, 0.08);
+  
+  /* Form Colors */
+  --input-background: #f9f9f9;
+  --input-focus: #f2f9f3;
+  --input-border: #5a7351;
+  --button-primary: #2e6da4;
+  --button-hover: #1e4c74;
+  
+  /* Spacing */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  
+  /* Border Radius */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Transitions */
+  --transition-speed: 0.3s;
+} 

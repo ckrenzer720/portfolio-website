@@ -35,12 +35,15 @@ body {
 
 /* Navigation Styles */
 .nav-links {
-  background-color: #3a4c47; /* Deep forest green */
+  background-color: #3a4c47;
   padding: 12px 0;
   display: flex;
   justify-content: center;
   gap: 25px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-links a {
@@ -48,12 +51,26 @@ body {
   text-decoration: none;
   font-size: 20px;
   padding: 10px 15px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.nav-links a:hover {
-  background-color: #517d5c; /* Lighter green for hover effect */
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: #517d5c;
   border-radius: 8px;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
 }
 
 /* Home Page Styles */
@@ -121,7 +138,7 @@ input,
 textarea {
   width: 100%;
   padding: 10px; /* Reduced padding */
-  margin-top: 2.5px; /* Reduced margin for a more compact look */
+  margin-bottom: 10px;
   border: 0px solid #5a7351;
   border-radius: 6px;
   background-color: #f9f9f9;

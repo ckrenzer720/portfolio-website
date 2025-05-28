@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import * as yup from "yup";
 import emailjs from "@emailjs/browser";
 
@@ -30,21 +36,12 @@ const initialValues = {
 
 function Contact() {
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState({
-    user_name: "",
-    user_email: "",
-    message: "",
-  });
-  const [enabled, setEnabled] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useRef();
 
-  useEffect(() => {
-    validationSchema.isValid(values).then((isValid) => {
-      setEnabled(isValid);
-    });
-  }, [values]);
-
-  const validate = (key, value) => {
+  // Memoize validation function
+  const validate = useCallback((key, value) => {
     yup
       .reach(validationSchema, key)
       .validate(value)
@@ -54,39 +51,65 @@ function Contact() {
       .catch((error) => {
         setErrors((prevErrors) => ({ ...prevErrors, [key]: error.errors[0] }));
       });
-  };
+  }, []);
 
-  const onChange = (evt) => {
-    const { id, value } = evt.target;
-    validate(id, value);
-    setValues((prevValues) => ({ ...prevValues, [id]: value }));
-  };
+  // Debounced validation
+  const debouncedValidate = useCallback(
+    (key, value) => {
+      const timeoutId = setTimeout(() => validate(key, value), 300);
+      return () => clearTimeout(timeoutId);
+    },
+    [validate]
+  );
 
-  const sendEmail = (evt) => {
+  const onChange = useCallback(
+    (evt) => {
+      const { id, value } = evt.target;
+      setValues((prevValues) => ({ ...prevValues, [id]: value }));
+      debouncedValidate(id, value);
+    },
+    [debouncedValidate]
+  );
+
+  const sendEmail = useCallback(async (evt) => {
     evt.preventDefault();
-    emailjs
-      .sendForm(
+    setIsSubmitting(true);
+
+    try {
+      await emailjs.sendForm(
         "service_nyiplyk",
         "contact_form",
         form.current,
-        "oReZPAeV9Y_5xjXCy" // Public key
-      )
-      .then(
-        () => {
-          alert("Thank you for reaching out! I'll get back to you soon!");
-          setValues(initialValues); // Reset form values
-        },
-        (error) => {
-          console.error("FAILED...", error.text);
-        }
+        "oReZPAeV9Y_5xjXCy"
       );
-  };
+      alert("Thank you for reaching out! I'll get back to you soon!");
+      setValues(initialValues);
+      setErrors({});
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      alert(
+        "Sorry, there was an error sending your message. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, []);
+
+  // Memoize form validity check
+  const isFormValid = useMemo(() => {
+    return (
+      Object.keys(errors).length === 0 &&
+      values.user_name &&
+      values.user_email &&
+      values.message
+    );
+  }, [errors, values]);
 
   return (
-    <div>
+    <div className="contact-container">
       <form id="my-form" ref={form} onSubmit={sendEmail}>
         <div className="input-groups">
-          <h3>Give me those credentials... if you want...</h3>
+          <h3>Say Hi! I love when new friends say hi.</h3>
           <div className="input-group">
             <label htmlFor="user_name">Name: </label>
             <input
@@ -96,10 +119,10 @@ function Contact() {
               type="text"
               value={values.user_name}
               onChange={onChange}
+              disabled={isSubmitting}
             />
             {errors.user_name && <p className="error">{errors.user_name}</p>}
-            <br />
-            <br />
+
             <label htmlFor="user_email">Email: </label>
             <input
               placeholder="Email goes here"
@@ -108,10 +131,10 @@ function Contact() {
               type="email"
               value={values.user_email}
               onChange={onChange}
+              disabled={isSubmitting}
             />
             {errors.user_email && <p className="error">{errors.user_email}</p>}
-            <br />
-            <br />
+
             <label htmlFor="user_contact">Tele (Optional): </label>
             <input
               placeholder="Enter your number"
@@ -121,9 +144,9 @@ function Contact() {
               pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
               value={values.user_contact}
               onChange={onChange}
+              disabled={isSubmitting}
             />
-            <br />
-            <br />
+
             <label htmlFor="message">Message: </label>
             <textarea
               placeholder="Write me a little something..."
@@ -131,12 +154,18 @@ function Contact() {
               name="message"
               value={values.message}
               onChange={onChange}
+              disabled={isSubmitting}
             />
             {errors.message && <p className="error">{errors.message}</p>}
-            <br />
           </div>
         </div>
-        <input type="submit" value="Send it my way!" disabled={!enabled} />
+        <button
+          type="submit"
+          disabled={!isFormValid || isSubmitting}
+          className={isSubmitting ? "submitting" : ""}
+        >
+          {isSubmitting ? "Sending..." : "Send it my way!"}
+        </button>
       </form>
     </div>
   );
