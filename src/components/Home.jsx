@@ -103,6 +103,16 @@ const SkillCard = styled.div`
   box-shadow: 0 4px 6px var(--shadow-color);
 `;
 
+const Select = styled.select`
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background-color: white;
+  font-size: 1rem;
+`;
+
 const ProjectsSection = styled.section`
   margin: 4rem 0;
 `;
@@ -113,29 +123,54 @@ const Carousel = styled.div`
 `;
 
 function Home() {
+  const technicalSkills = [
+    "JavaScript/TypeScript",
+    "React",
+    "Node.js",
+    "Express",
+    "HTML/CSS",
+    "SQL",
+    "Git",
+    "REST APIs",
+    "PostgreSQL",
+  ];
+
+  const softSkills = [
+    "Communication",
+    "Problem Solving",
+    "Team Collaboration",
+    "Time Management",
+    "Adaptability",
+    "Leadership",
+    "Critical Thinking",
+    "Attention to Detail",
+    "Creativity",
+    "Emotional Intelligence",
+  ];
+
   return (
     <HomeContainer>
       <HeroSection>
-        <Name>Your Name</Name>
+        <Name>Conner Krenzer</Name>
         <Profession>Full Stack Developer</Profession>
 
         <SocialLinks>
           <a
-            href="https://github.com/yourusername"
+            href="https://github.com/ckrenzer720"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaGithub />
           </a>
           <a
-            href="https://linkedin.com/in/yourusername"
+            href="https://linkedin.com/in/conner-krenzer/"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FaLinkedin />
           </a>
           <a
-            href="https://instagram.com/yourusername"
+            href="https://instagram.com/c_krenza/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -179,23 +214,23 @@ function Home() {
         <SkillsGrid>
           <SkillCard>
             <h3>Technical Skills</h3>
-            <ul>
-              <li>JavaScript/TypeScript</li>
-              <li>React</li>
-              <li>Node.js</li>
-              <li>Python</li>
-              {/* Add more skills */}
-            </ul>
+            <Select>
+              {technicalSkills.map((skill, index) => (
+                <option key={index} value={skill}>
+                  {skill}
+                </option>
+              ))}
+            </Select>
           </SkillCard>
           <SkillCard>
             <h3>Soft Skills</h3>
-            <ul>
-              <li>Communication</li>
-              <li>Problem Solving</li>
-              <li>Team Collaboration</li>
-              <li>Time Management</li>
-              {/* Add more skills */}
-            </ul>
+            <Select>
+              {softSkills.map((skill, index) => (
+                <option key={index} value={skill}>
+                  {skill}
+                </option>
+              ))}
+            </Select>
           </SkillCard>
         </SkillsGrid>
       </SkillsSection>

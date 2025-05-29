@@ -135,7 +135,7 @@ function Contact() {
             />
             {errors.user_email && <p className="error">{errors.user_email}</p>}
 
-            <label htmlFor="user_contact">Tele (Optional): </label>
+            <label htmlFor="user_contact">Phone Number (Optional): </label>
             <input
               placeholder="Enter your number"
               id="user_contact"

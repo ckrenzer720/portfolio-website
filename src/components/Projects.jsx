@@ -41,7 +41,7 @@ const Projects = () => {
                     rel="noopener noreferrer"
                     aria-label={`View GitHub repository for ${project.title}`}
                   >
-                    View Repo
+                    View Repo on GitHub
                   </a>
                 )}
               </div>

@@ -1,5 +1,6 @@
 import calculatorPng from "../images/calculator.png";
 import noPhotoPng from "../images/noPhoto.png";
+import pokeDexPng from "../images/pokeDex.png";
 
 const projectsData = [
   {
@@ -22,11 +23,12 @@ const projectsData = [
   },
   {
     id: 3,
-    title: "",
-    description: "description coming soon",
-    image: noPhotoPng,
-    tech: ["Tailwind", "REST", "Auth0", "Jest"],
-    repo: "https://github.com/ckrenzer720/asylum-hrf-fe-starter.git",
+    title: "PokeDex v1.1 (Currently in Development)",
+    description:
+      "This PokéDex is a modern SPA that allows Pokémon trainers to browse and explore the world of Pokémon. The application features user authentication, detailed Pokémon information, and personalized user profiles.",
+    image: pokeDexPng,
+    tech: ["React.js", "Redux Toolkit", "Auth0", "Axios"],
+    repo: "https://github.com/ckrenzer720/PokeDex-v1.1.git",
   },
 ];
 

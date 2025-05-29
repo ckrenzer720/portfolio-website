@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="app-container">
       <Helmet>
-        <title>Your Name | Full Stack Developer</title>
+        <title>Conner Krenzer | Full Stack Developer</title>
         <meta
           name="description"
           content="Welcome to my portfolio website showcasing my work as a developer and designer."
